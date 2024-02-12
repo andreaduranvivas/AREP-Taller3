@@ -1,0 +1,35 @@
+
+f
+java:S2095"JUse try-with-resources or close this "ServerSocket" in a "finally" clause.(‰ßå8ßÌ˜ÜÙ1
+o
+java:S3008"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥½¬Ìúÿÿÿÿ
+l
+java:S1450"VRemove the "running" field and declare it as a local variable in the relevant methods.(ğ—«
+´
+java:S6548"˜A Singleton implementation was detected. Make sure the use of the Singleton pattern is required and the implementation is the right one for the context.(––ûÍúÿÿÿÿ
+m
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ÓÜ¯ıÿÿÿÿ
+F
+java:S1172"+Remove this unused method parameter "args".(ÓÜ¯ıÿÿÿÿ
+@	java:S106 "+Replace this use of System.err by a logger.(òó×¤
+L
+java:S2696$"6Make the enclosing method "static" or remove this set.(Üğ‚¾
+@	java:S106)"+Replace this use of System.out by a logger.(ËĞñä
+@	java:S106,"+Replace this use of System.err by a logger.(Ì½æ©
+@	java:S106C"+Replace this use of System.out by a logger.(ƒ°Ğ
+O
+java:S1854‚"8Remove this useless assignment to local variable "args".(†“º×
+ˆ
+java:S1130"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(×ëÙ£ûÿÿÿÿ
+
+java:S1130"tRemove the declaration of thrown exception 'java.net.URISyntaxException', as it cannot be thrown from method's body.(×ëÙ£ûÿÿÿÿ
+@
+java:S1481‚")Remove this unused "args" local variable.(†“º×
+V
+java:S1854‰"8Remove this useless assignment to local variable "args".(†“º×8“ùŞÛÙ1
+
+java:S1130ˆ"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(–äàªıÿÿÿÿ8”ùŞÛÙ1
+—
+java:S1130ˆ"tRemove the declaration of thrown exception 'java.net.URISyntaxException', as it cannot be thrown from method's body.(–äàªıÿÿÿÿ8”ùŞÛÙ1
+G
+java:S1481‰")Remove this unused "args" local variable.(†“º×8•ùŞÛÙ1

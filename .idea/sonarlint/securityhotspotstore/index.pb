@@ -31,3 +31,5 @@ Q.idea/sonarlint/securityhotspotstore/8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a057
 Q.idea/sonarlint/securityhotspotstore/e/d/ed5e09fe09c63dc2af723d058fc48a0b634730e0,6\3\63e45b794f56a19ed04be054a7ae7cd50ad31b5d
 Å
 Q.idea/sonarlint/securityhotspotstore/9/2/920e96c1a68741994412cfe11a19d44a26f998c1,c\0\c0b90cf6e83d5dea43ca3f54dda81cd062f2386b
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec

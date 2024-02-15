@@ -154,6 +154,7 @@ mvn test -Dtest=MisServiciosTest
 
 Most functions are tested by running the application in the browser. All the above tutorial was based on the application on Windows. The following image demonstrates the current project on Linux
 
+![Image Description](ss/l.png)
 ![Image Description](ss/linux.png)
 
 

@@ -1,12 +1,18 @@
 package arep.clase.myspark;
 
+import arep.clase.myspark.handle.Function;
+import arep.clase.myspark.handle.PostFunction;
+import arep.clase.nuevasFunciones.Response;
+import arep.clase.nuevasFunciones.StaticFiles;
+
 import java.net.*;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LBSpark {
 
@@ -15,14 +21,25 @@ public class LBSpark {
     private static PostFunction postService = null;
 
     private static boolean running = false;
+    private static StaticFiles staticFiles = new StaticFiles();
+    private static Response responseTemplate = new Response();
+    private static Map<String, Function> getRoutes = new HashMap<>();
+    private static Map<String, PostFunction> postRoutes = new HashMap<>();
     private static LBSpark _instance = new LBSpark();
 
-    private LBSpark() {}
+    public LBSpark() {}
 
     public static LBSpark getInstance() {
         return _instance;
     }
 
+    public static StaticFiles getStaticFiles() {
+        return staticFiles;
+    }
+
+    public static Response getResponse() {
+        return responseTemplate;
+    }
 
     public void runServer(String[] args) throws IOException, URISyntaxException {
         ServerSocket serverSocket = null;
@@ -100,20 +117,26 @@ public class LBSpark {
         serverSocket.close();
     }
 
-    private byte[] callService(String method, URI requestUri, String body) {
+    public byte[] callService(String method, URI requestUri, String body) throws Exception {
         String calledServiceUri = requestUri.getPath().substring(7);
         byte[] outputBytes = new byte[0];
 
-        if ("GET".equalsIgnoreCase(method) && serviceUri.equals(calledServiceUri)) {
-            String output = service.handle(requestUri.getQuery());
-            outputBytes = output.getBytes(StandardCharsets.UTF_8);
-        } else if ("POST".equalsIgnoreCase(method) && serviceUri.equals(calledServiceUri)) {
-            String output = postService.handlePost(body);
-            outputBytes = output.getBytes(StandardCharsets.UTF_8);
+        if ("GET".equalsIgnoreCase(method)) {
+            Function handler = getRoutes.get(calledServiceUri);
+            if (handler != null) {
+                String output = handler.handle(requestUri.getQuery());
+                outputBytes = output.getBytes(StandardCharsets.UTF_8);
+            }
+        } else if ("POST".equalsIgnoreCase(method)) {
+            PostFunction handler = postRoutes.get(calledServiceUri);
+            if (handler != null) {
+                String output = handler.handlePost(body);
+                outputBytes = output.getBytes(StandardCharsets.UTF_8);
+            }
         }
 
         String response = "HTTP/1.1 200 OK\r\n"
-                + "Content-Type:text/html\r\n"
+                + "Content-Type: " + responseTemplate.getContentType() + "\r\n"
                 + "\r\n";
 
         byte[] headerBytes = response.getBytes(StandardCharsets.UTF_8);
@@ -126,27 +149,30 @@ public class LBSpark {
     }
 
 
-    public static void get(String path, Function svc) throws IOException, URISyntaxException {
-        String[] args = {};
-        serviceUri = path;
-        service = svc;
+    public static String get(String path, Function svc) {
+        getRoutes.put(path, svc);
 
+        return path;
     }
 
-    public static void post(String path, PostFunction svc) throws IOException, URISyntaxException {
-        String[] args = {};
-        serviceUri = path;
-        postService = svc;
+    public static void post(String path, PostFunction svc) {
+        postRoutes.put(path, svc);
     }
 
+    public static Map<String, Function> getGetRoutes() {
+        return getRoutes;
+    }
 
+    public static Map<String, PostFunction> getPostRoutes() {
+        return postRoutes;
+    }
 
     /**
      * Generates an HTTP error response with status code 404 Not Found
      *
      * @return          the HTTP error response as a byte array
      */
-    private static byte[] httpError() {
+    static byte[] httpError() {
         String errorResponse = "HTTP/1.1 404 Not Found\r\n" +
                 "Content-Type: text/html\r\n" +
                 "\r\n" +
@@ -172,7 +198,12 @@ public class LBSpark {
      * @return                the HTTP response as a byte array
      */
     public static byte[] htttpResponse(URI requestedURI) throws IOException {
-        Path file = Paths.get("target/classes/public" + requestedURI.getPath());
+        Path file;
+        if ("/movie".equals(requestedURI.getPath())) {
+            file = Paths.get(staticFiles.getDirectory(), "formulario.html");
+        } else {
+            file = Paths.get(staticFiles.getDirectory() + requestedURI.getPath());
+        }
 
         if (Files.isRegularFile(file)) {
             String mimeType = Files.probeContentType(file);
